@@ -1,0 +1,129 @@
+                                TunnelWars V1.0
+        
+                     Copyright 1995, 98  Greg Ratajik.
+               
+	                        email: OS2@ratajik.net
+                                
+                      web page: www.ratajik.net/TunnelWars
+	    
+-------------------------------------------------------------------
+I.  General
+
+       TunnelWars is a OS/2 side scrolling, shoot-em-up action game. 
+    This version is a DEMO (the game was written in 1994-95, but never 
+    completed.  I’ve recently released all of the OS/2 shareware, including
+    this one.  I’ve fixed some problems, but do not consider the game 
+    complete.)  This demo show’s how OS/2 can be used to massively thread
+    a game, and shows the performance OS/2 can give for an action game. 
+    Please check out http://www.ratajik.net/TunnelWars for more information,
+    and the source code. 
+     
+II. How to play
+
+
+A. Starting.
+	
+	  Select the "Options" menu and click start.  
+
+B.  Controlling the ship.
+
+	  The ship can be controlled be a joystick or keyboard.  
+	If using the keyboard, the following keys are used:
+
+	Left, Right, Up, Down 	- Arrow Keys
+	1-9			            - Speed	
+	a	            		- Plasma Cannon
+   	s	            		- Dumb Missile
+	d           			- Smart Missile		
+	f		            	- Raptor Missile
+	g		            	- Nova Bomb
+	h	            		- Plasma Carpet Bomb
+	space	           		- FIRE
+
+
+C.  Gameplay
+
+	  Your goal is to destroy as many of the Walkers as you can.  
+	The Walkers will in turn try to frag you (Yeah, I know, what a 
+	simple game!  Sorry, it really was just meant as a OS/2 game demo.  
+	While the code is in place to make it a bit more interesting, 
+	I currently don’t have time to do so… and I wouldn’t do it in OS/2 if 
+	I did have the time! <VGB>)
+
+          
+IV. Other shareware/PD programs to look for:
+
+     o NetChat - This program allows many users to have Chat
+                 sessions over the LAN.  It allows each user to set
+                 up Conference groups and security levels.  Each
+                 Conference can have as many users as you want
+                 Chatting.  This is similar to CompuServer's CB, or
+                 a BBS's multi-node chat area.  (This program is free
+                 when you use QuikWare to register EasyPlay
+
+     o NetMail - Improved net massaging (i.e. "Blue Boxes")
+
+                    This program gives you better control of
+               system level LAN messages.  You can enter message
+               subjects, set priority levels, and type in longer
+               messages. 
+                    NetMail allows each user to set up their own
+               message groups, along with global message groups. 
+               Each user can choose which groups to receive
+               messages from, and what groups to send messages to.
+                    NetMail also let's you choose whether to get
+               the message in the traditional VIO BlueBox (but
+               better looking!), a PM Message Box, or to display
+               no message but to retrieve it at a latter time.
+                    This program makes Net Massaging easier to
+               use, and less annoying to the recipients.
+
+     o    DeleteDir - A simple full-screen program to delete a
+          directory and all files/directories that are children to
+          it.
+
+     o    Netblast - send a LAN message.. plus be able to change the 
+          FROM ID in the message (fake out LAN messaging! COOL!)
+
+     o    ChkPath - Will check the path's you set in your
+          config.sys, and let you know if you've got problems.
+
+     o    Pwh - Path'ed Where.  Will search a path for a file.  PWH
+          will tell you every place it hit's the file.  Very useful
+          for checking what version of a program you using.
+     
+     o    MDD - Multiple make directory.  MDD will create a
+          multiple directories (i.e. if you wanted to make
+          C:\GREG\PROGRAM\SOURCE20\MDD\RELEASE, MDD could do it in
+          one shot.)
+     
+     o    WHO - Will display information about all users of a
+          LAN/Domain.
+
+     o    QWHO - Displays all user ID's currently on a LAN/Domain.
+
+     o    Vtree - Visual directory tree.
+     o    EDCNFG - PM based program that will verify everything's
+          okay in your config.sys, keep track/retro changes into
+          multiple config's, and edit/setup a config.sys
+
+     o    HPMLib - Library tracking system
+
+     o    HPMCook - Cooking software
+
+     o    HPMDiet - Dieting software
+
+     o    JOGGER - OS/2 Program for runners.
+
+     o    DosText - Change the message a OS/2 program gives when
+          running it from DOS.
+
+     Programming Utilities:
+
+     o    AniButtn - Two-state animated pushbuttons that you can
+          easily replace any pushbutton with.
+
+     o    VidButtn -  Just like AniButtn, but will full-frame
+          animation.  (The ones in EasyPlay work exactly like a
+          pushbutton, but have up to 17 frames of animation!)
+

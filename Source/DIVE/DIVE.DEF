@@ -1,0 +1,9 @@
+NAME        SHOW        WINDOWAPI
+
+DESCRIPTION 'TunnelWars   Copyright 1995, 98 Greg Ratajik'
+
+HEAPSIZE    1800000
+STACKSIZE   1800000
+
+PROTMODE
+

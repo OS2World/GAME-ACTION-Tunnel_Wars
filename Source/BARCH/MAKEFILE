@@ -1,0 +1,50 @@
+debugc=/Ti+
+debugl=/CO
+
+dynamic=RATAJIK_DYNAMIC_LINK
+
+ALL: test.exe barchw.exe barchr.exe barch.obj
+
+barchw.obj : barchw.c barch.h barchu.h barchu.c
+     ICC.EXE /W3 /O- /Se /C+ /ss /Ss $(debugc) /D$(dynamic)  .\$*.c
+
+barchr.obj : barchr.c barch.h barchu.h barchu.c
+     ICC.EXE /W3 /O- /Se /C+ /ss /Ss $(debugc) /D$(dynamic)  .\$*.c
+
+test.obj  : test.c barch.h barchr.obj
+     ICC.EXE /W3 /O- /Se /C+ /ss /Ss $(debugc) /D$(dynamic)   .\$*.c
+
+# make the obj to link to (no main)
+barch.obj  : barchr.c barch.h barchu.h barchu.c
+     ICC.EXE /Fobarch.obj /DNO_MAIN /W3 /O- /Se /C+ /ss /Ss $(debugc) /D$(dynamic)  barchr.c
+
+
+barchw.EXE :  barch.def barchw.obj
+    icc.exe @<<
+      /B" /de /pmtype:pm /nologo /m:full"
+      /Fe"barchw.EXE" 
+      barch.DEF
+      cppooc3i.lib
+      cppom30i.lib
+      barchw.obj
+<<
+
+barchr.EXE :  barch.def barchr.obj
+    icc.exe @<<
+      /B" /de /pmtype:pm /nologo /m:full"
+      /Fe"barchr.EXE" 
+      barch.DEF
+      cppooc3i.lib
+      cppom30i.lib
+      barchr.obj
+<<
+
+test.EXE   :  test.def test.obj barch.obj
+    icc.exe @<<
+      /B" /de /pmtype:pm /nologo /m:full"
+      /Fe"test.EXE" 
+      test.DEF
+      cppooc3i.lib cppom30i.lib
+      test.obj barch.obj
+<<
+

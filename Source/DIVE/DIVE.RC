@@ -1,0 +1,93 @@
+
+#include <os2.h>
+#include "dive.rch"
+
+DLGINCLUDE 1 "dive.dlg"
+
+ICON  ID_MAINWND DIVE.ICO
+
+MENU                                    ID_MAINWND      PRELOAD
+   {
+   SUBMENU      "~Options",             ID_OPTIONS,     MIS_TEXT
+      {
+      MENUITEM  "~Start",               ID_START,       MIS_TEXT
+      MENUITEM  "S~top",                ID_STOP,        MIS_TEXT
+      MENUITEM                                          SEPARATOR
+      MENUITEM  "~Adjust",              ID_ADJUST,      MIS_TEXT
+      MENUITEM                                          SEPARATOR
+      MENUITEM  "E~xit\tF3",            ID_EXIT,        MIS_TEXT
+      }
+   }
+
+
+
+ACCELTABLE ID_MAINWND
+  BEGIN
+    "1",	  IDM_POWER_ONE,	    CONTROL
+  END
+
+#include "\SOURCE30\DIVE\twdlg.H"
+
+DLGTEMPLATE DLG_ADJ LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Adjust Values", DLG_ADJ, 154, 114, 176, 117, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        ENTRYFIELD      "", EF_PRIMARY, 126, 96, 32, 8, ES_MARGIN
+        LTEXT           "Primary Graphics Engine", 102, 21, 97, 100, 8
+        LTEXT           "Auto-Move/Collision Detect", TX_SCORE, 9, 85, 113, 
+                        8
+        LTEXT           "Player Sprite", TX_MESSAGE, 67, 72, 55, 8
+        ENTRYFIELD      "", EF_AUTO, 126, 84, 32, 8, ES_MARGIN
+        ENTRYFIELD      "", EF_PLAYER, 126, 72, 32, 8, ES_MARGIN
+        PUSHBUTTON      "~Ok", PB_OK, 3, 3, 40, 14
+        PUSHBUTTON      "~Apply", PB_APPLY, 46, 3, 40, 14
+        PUSHBUTTON      "~Cancel", PB_CANCEL, 89, 3, 40, 14
+        GROUPBOX        "Thread Timers", 110, 1, 64, 169, 51
+        GROUPBOX        "Speed", TXT_FRAMES, 1, 36, 169, 26
+        LTEXT           "Scroll", 112, 7, 44, 24, 8
+        ENTRYFIELD      "", EF_SCROLL_SPEED, 34, 44, 32, 8, ES_MARGIN
+    END
+END
+                    
+DLGTEMPLATE DLG_GAME_INFO LOADONCALL MOVEABLE DISCARDABLE
+BEGIN           
+    DIALOG  "Test", DLG_GAME_INFO, -7, -6, 345, 87, WS_VISIBLE, FCF_SYSMENU | 
+            FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Program Information", 112, 2, 1, 172, 86
+        LTEXT           "Score:", EF_PRIMARY, 215, 71, 26, 8, NOT WS_GROUP
+        GROUPBOX        "Game Information", 115, 177, 47, 166, 40, NOT 
+                        WS_GROUP
+        GROUPBOX        "Frames per Second", 142, 7, 4, 163, 37, NOT 
+                        WS_GROUP
+        LTEXT           "0", TX_SCORE, 243, 71, 92, 8
+        LTEXT           "Weapon Type:", 122, 182, 62, 59, 8
+        LTEXT           "w", TXT_WEAPON_TYPE, 243, 62, 68, 8
+        LTEXT           "Speed:", 124, 213, 53, 28, 8
+        LTEXT           "s", TXT_SPEED, 243, 53, 55, 8
+        LTEXT           "Memory Alloc:", 126, 37, 72, 60, 8
+        LTEXT           "m", TXT_MEMORY, 97, 72, 66, 8
+        LTEXT           "Threads:", 128, 60, 63, 36, 8
+        LTEXT           "t", TXT_THREADS, 97, 63, 40, 8
+        GROUPBOX        "Location", 102, 177, 14, 166, 32
+        LTEXT           "X:", 131, 183, 30, 10, 8
+        LTEXT           "Y:", 132, 182, 18, 10, 8
+        LTEXT           "", TXT_CUR_X, 195, 30, 91, 8
+        LTEXT           "", TXT_CUR_Y, 197, 18, 93, 8
+        LTEXT           "Total Sprite Nodes:", 135, 14, 54, 82, 8
+        LTEXT           "tsn", TXT_TOT_SPRITES, 97, 54, 38, 8
+        LTEXT           "Total Active Sprites:", 137, 7, 45, 89, 8
+        LTEXT           "tas", TXT_TOT_ACTIVE, 97, 45, 38, 8
+        LTEXT           "Current:", 110, 57, 26, 36, 8
+        LTEXT           "0.000", TXT_FRAMES, 95, 26, 44, 8
+        AUTOCHECKBOX    "~Blank", CK_BLANK, 181, 1, 40, 10
+        LTEXT           "High:", 111, 68, 17, 24, 8
+        LTEXT           "Low:", DLG_ADJ, 69, 8, 23, 8
+        LTEXT           "0.000", TXT_FRAME_HIGH, 95, 17, 32, 8
+        LTEXT           "0.000", TXT_FRAME_LOW, 95, 8, 33, 8
+        PUSHBUTTON      "~Clear", PB_CLEAR, 134, 10, 30, 14
+        AUTOCHECKBOX    "~DiveBlit (Sprites)", CK_DIVEBLIT, 223, 1, 95, 10
+    END
+END
+

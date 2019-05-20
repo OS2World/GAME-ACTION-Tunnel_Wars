@@ -1,0 +1,70 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+DLGINCLUDE 1 "D:\SOURCE30\DIVE\twdlg.H"
+
+DLGTEMPLATE DLG_ADJ LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Adjust Values", DLG_ADJ, 154, 114, 176, 117, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        ENTRYFIELD      "", EF_PRIMARY, 126, 96, 32, 8, ES_MARGIN
+        LTEXT           "Primary Graphics Engine", 102, 21, 97, 100, 8
+        LTEXT           "Auto-Move/Collision Detect", TX_SCORE, 9, 85, 113, 
+                        8
+        LTEXT           "Player Sprite", TX_MESSAGE, 67, 72, 55, 8
+        ENTRYFIELD      "", EF_AUTO, 126, 84, 32, 8, ES_MARGIN
+        ENTRYFIELD      "", EF_PLAYER, 126, 72, 32, 8, ES_MARGIN
+        PUSHBUTTON      "~Ok", PB_OK, 3, 3, 40, 14
+        PUSHBUTTON      "~Apply", PB_APPLY, 46, 3, 40, 14
+        PUSHBUTTON      "~Cancel", PB_CANCEL, 89, 3, 40, 14
+        GROUPBOX        "Thread Timers", 110, 1, 64, 169, 51
+        GROUPBOX        "Speed", TXT_FRAMES, 1, 36, 169, 26
+        LTEXT           "Scroll", 112, 7, 44, 24, 8
+        ENTRYFIELD      "", EF_SCROLL_SPEED, 34, 44, 32, 8, ES_MARGIN
+    END
+END
+
+DLGTEMPLATE DLG_GAME_INFO LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Test", DLG_GAME_INFO, 9, 65, 345, 95, WS_VISIBLE, FCF_SYSMENU | 
+            FCF_TITLEBAR
+    BEGIN
+        GROUPBOX        "Program Information", 112, 4, 9, 172, 86
+        LTEXT           "Score:", EF_PRIMARY, 215, 79, 26, 8, NOT WS_GROUP
+        GROUPBOX        "Game Information", 115, 177, 55, 166, 40, NOT 
+                        WS_GROUP
+        GROUPBOX        "Frames per Second", 142, 7, 11, 163, 38, NOT 
+                        WS_GROUP
+        LTEXT           "0", TX_SCORE, 243, 79, 92, 8
+        LTEXT           "Weapon Type:", 122, 182, 70, 59, 8
+        LTEXT           "w", TXT_WEAPON_TYPE, 243, 70, 68, 8
+        LTEXT           "Speed:", 124, 213, 61, 28, 8
+        LTEXT           "s", TXT_SPEED, 243, 61, 55, 8
+        LTEXT           "Memory Alloc:", 126, 37, 80, 60, 8
+        LTEXT           "m", TXT_MEMORY, 97, 80, 66, 8
+        LTEXT           "Threads:", 128, 60, 71, 36, 8
+        LTEXT           "t", TXT_THREADS, 97, 71, 40, 8
+        GROUPBOX        "Location", 102, 177, 22, 166, 32
+        LTEXT           "X:", 131, 183, 38, 10, 8
+        LTEXT           "Y:", 132, 182, 26, 10, 8
+        LTEXT           "", TXT_CUR_X, 195, 38, 91, 8
+        LTEXT           "", TXT_CUR_Y, 197, 26, 93, 8
+        LTEXT           "Total Sprite Nodes:", 135, 14, 62, 82, 8
+        LTEXT           "tsn", TXT_TOT_SPRITES, 97, 62, 38, 8
+        LTEXT           "Total Active Sprites:", 137, 7, 53, 89, 8
+        LTEXT           "tas", TXT_TOT_ACTIVE, 97, 53, 38, 8
+        LTEXT           "Current:", 110, 57, 32, 33, 8
+        LTEXT           "0.000", TXT_FRAMES, 95, 32, 44, 8
+        AUTOCHECKBOX    "~Blank", CK_BLANK, 181, 9, 40, 10
+        LTEXT           "High:", 111, 66, 23, 24, 8
+        LTEXT           "Low:", DLG_ADJ, 67, 13, 23, 8
+        LTEXT           "0.000", TXT_FRAME_HIGH, 95, 23, 32, 8
+        LTEXT           "0.000", TXT_FRAME_LOW, 95, 13, 33, 8
+        PUSHBUTTON      "~Clear", PB_CLEAR, 134, 18, 30, 14
+        AUTOCHECKBOX    "~DiveBlit (Sprites)", CK_DIVEBLIT, 223, 9, 95, 10
+        LTEXT           "Message:", 143, 57, 47, 39, 8
+        LTEXT           "Message:", 144, 4, 0, 41, 8
+        LTEXT           "<Not On>", TXT_MESSAGE, 42, 0, 295, 8
+    END
+END

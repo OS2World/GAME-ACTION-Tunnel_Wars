@@ -1,0 +1,26 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+DLGINCLUDE 1 "D:\SOURCE\DIVE\adj.h"
+
+DLGTEMPLATE DLG_GAME_INFO LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Adjust Values", DLG_GAME_INFO, 154, 114, 176, 117, WS_VISIBLE, 
+            FCF_SYSMENU | FCF_TITLEBAR
+    BEGIN
+        ENTRYFIELD      "", EF_PRIMARY, 126, 96, 32, 8, ES_MARGIN
+        LTEXT           "Primary Graphics Engine", 102, 21, 97, 100, 8
+        LTEXT           "Auto-Move/Collision Detect", TX_SCORE, 9, 85, 113, 
+                        8
+        LTEXT           "Player Sprite", TX_MESSAGE, 67, 72, 55, 8
+        ENTRYFIELD      "", EF_AUTO, 126, 84, 32, 8, ES_MARGIN
+        ENTRYFIELD      "", EF_PLAYER, 126, 72, 32, 8, ES_MARGIN
+        PUSHBUTTON      "~Ok", PB_OK, 3, 3, 40, 14
+        PUSHBUTTON      "~Apply", PB_APPLY, 46, 3, 40, 14
+        PUSHBUTTON      "~Cancel", PB_CANCEL, 89, 3, 40, 14
+        GROUPBOX        "Thread Timers", 110, 1, 64, 169, 51
+        GROUPBOX        "Speed", 111, 1, 36, 169, 26
+        LTEXT           "Scroll", 112, 7, 44, 24, 8
+        ENTRYFIELD      "", EF_SCROLL_SPEED, 34, 44, 32, 8, ES_MARGIN
+    END
+END

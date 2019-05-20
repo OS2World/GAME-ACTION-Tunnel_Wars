@@ -1,0 +1,766 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<title>TunnelWars - Design Document</title>
+</head>
+
+<body>
+
+<p align="center">NOTE:&nbsp; This is a straight import from word (not pretty).&nbsp; The
+To get the Word version of this document,<font size="6"><b></b></font></p><font size="6"><b>
+
+<p align="center"><a href="http://www.ratajik.net/TunnelWars/Download/twsrc.zip">download the source code</a></p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER">Diver </p>
+
+<p align="CENTER">(a.k.a. TunnelWars)</p>
+
+<p align="CENTER">for OS/2</p>
+
+<p align="CENTER">&nbsp;</p>
+
+</b></font><p align="CENTER"><font size="6"><b></b></font><font size="2">&nbsp;</font></p><font size="2">
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER"><img src="TunnelWars%20-%20Design%20Document_files/Image6.gif" height="333" width="333"></p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER">&nbsp;</p>
+
+</font><p align="CENTER"><font size="2"></font><b><font size="5">&nbsp;</font></b></p><b><font size="5">
+
+</font><p align="CENTER"><font size="5">Design Document</font></p>
+
+</b><p align="CENTER"><b></b><font size="5">&nbsp;</font></p><font size="5">
+
+</font><p align="CENTER"><font size="5">By: Greg Ratajik</font></p>
+
+<p align="CENTER">5-5-1998</p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p align="CENTER">&nbsp;</p>
+
+<p><font size="2">&nbsp;</font></p><font size="2">
+
+<p align="CENTER">Copyright 1995, 98 Greg Ratajik</p>
+
+</font><p align="CENTER"><font size="2">www.ratajik.net</font><b><font face="Arial" size="4"></font></b></p><b><font face="Arial" size="4">
+
+<p>&nbsp;</p>
+
+</font><p><font face="Arial" size="4"></font><font size="2">&nbsp;</font></p><font size="2">
+
+<p>I. Introduction </p>
+
+</font></b><font size="2"><blockquote><b>
+  </b><p>A. Introduction </p>
+  <p>B. Who this document is for. </p>
+  <p>C. Information about the code. </p>
+</blockquote>
+
+<p><b>&nbsp;</b></p><b>
+
+<p>II. High level design </p>
+
+</b></font><blockquote><font size="2"><b>
+  </b><p>A. Overall architecture </p>
+  <i><p>1. The User Interface Layer </p>
+  <p>2. The Game Engine Layer </p>
+  </i></font><blockquote><font size="2"><i>
+    </i></font><font size="1"><p>a. Player Sprite </p>
+    <p>b. Computer Sprite </p>
+    <p>c. Action Sprites (missiles) </p>
+    <p>d. Sprite messaging. </p>
+  </font></blockquote><font size="1">
+  </font><font size="2"><i><p>3. The Sprite Layer </p>
+  </i></font><blockquote><font size="2"><i>
+    </i></font><font size="1"><p>a. Collision Detection </p>
+    <p>b. Automove </p>
+  </font></blockquote><font size="1">
+  </font><font size="2"><i><p>4. Video Layer. </p>
+  </i><p>B. Code Highlights </p>
+  <i><p>1. Sprite Linked list. </p>
+  </i></font><blockquote><font size="2"><i>
+    </i></font><font size="1"><p>a. SPRITE_HEADER </p>
+    <p>b. HIT_INFO </p>
+    <p>c. SPACE_INFO </p>
+    <p>b. ACTIVE_BITMAP_LIST </p>
+    <p>d. BITMAP_INFO </p>
+    <p>e. User Defined Info </p>
+    <p>b. Alive, Inactive, and Dead lists. </p>
+  </font></blockquote><font size="1">
+  </font><font size="2"><i><p>2. BARCH (Binary Archive) </p>
+  <p>3. Bitmap Loading </p>
+  <p>4. "Loose" Synchronization </p>
+  </i><p>C. Compiling. </p>
+</font></blockquote><font size="2">
+
+<p><b>&nbsp;</b></p><b>
+
+<p>II. Other Information. </p>
+
+</b><blockquote><b>
+  </b><p>A. Known issues. </p>
+  <p>A. Performance characteristics </p>
+</blockquote>
+
+<p><b>&nbsp;</b></p><b>
+
+</b></font><b><p><font size="2">III. Conclusions </font><font face="Arial" size="4"></font></p><font face="Arial" size="4">
+
+</font></b><blockquote><b><font face="Arial" size="4">
+  </font></b><font size="2"><p>Figure 1 - High Level Logical Diagram </p>
+  <p>Figure 2 - Game sub-system </p>
+  <p>Figure 3 - Sprite Layer </p>
+  <p>Figure 4 - Video Layer </p>
+  </font><b><font face="Arial" size="4">
+</font></b></blockquote><b><font face="Arial" size="4">
+
+<p>&nbsp;</p>
+
+</font><p><font face="Arial" size="4"><a name="_Toc419370655">I. Introduction</a></font><font face="Arial"></font></p><font face="Arial">
+
+</font></b><p><b><font face="Arial"><a name="_Toc413587963"></a><a name="_Toc419370656">A. Introduction</a></font></b><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    <p>This document describes a heavily multi-threaded game engine for OS/2. While the engine
+    has been used in the game TunnelWars, this document describes the engine in a generic way,
+    one in which any type of 2D scrolling game may be implement using the engine.</p>
+    <p>The original reason for writing the engine was to prove whether a action game, with a
+    scrolling background and many sprites, could be totally written using threads. Each sprite
+    is a thread; when the player fires a missile , each is its own thread, interacting with
+    the game environment as a self contained entity. What would game performance be like with
+    so many threads? Would the overhead prove to be to much? And would threading make the game
+    programming easier or more difficult?</p>
+    </font><p><font size="2">Another reason for written the game was to show that OS/2 was able to be a game OS.
+    Could it handle high speed parallax scrolling? Was it possible to blit a large number of
+    sprites using OS/2 API’s, and have acceptable performance?</font></p>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial"><b>&nbsp;</b></font></p><font face="Arial"><b>
+
+</b></font><p><font face="Arial"><b><a name="_Toc419370657">B. Who this document is for.</a></b></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    <p>I’ve released the source code for the game engine and the sample game in to the
+    public domain. Anyone that wants to use it to write their own game may find this document
+    useful in understanding the architecture of the game engine, and how to go about writing
+    their own game based on the engine. </p>
+    </font><p><font size="2">This document may also be useful for a general introduction to one of the ways a game
+    may be massively multithread, as I’ve have had to address many of the issues that are
+    inherent in this type of code.</font></p>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial"><b>&nbsp;</b></font></p><font face="Arial"><b>
+
+</b></font><p><font face="Arial"><b><a name="_Toc419370658">C. Information about the code.</a></b></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    <p>The main web page for the engine and Diver can be found at:
+    http://www.ratajik.net/diver</p>
+    <p>The source code is available from that page. Please read the copyright information
+    found on the main page.</p>
+    <p>I originally wrote this code in 1994-95. I finished the game engine and was ready to go
+    when my graphics guy (Robert Kauffman) dropped out of the project. As I didn’t have
+    any decent graphics tools (Hey, it was OS/2!) I never actually released the game. The
+    background and Walker were done by Bob (Cool, huh?). The rest I slapped together. </p>
+    <p>I recently decided to re-release all of my OS/2 shareware software
+    (http://www.ratajik.net/OS2), and most of the source code. This release of Diver is from
+    that effort. While I’ve touched up the code a bit (fixed a couple of bugs, general
+    clean up, etc.), it still is very much a pre-released game. I may port the code to Windows
+    (the code is VERY portable, as it’s layered nicely). If so, I will continue to make
+    improvements to it. I also am now mostly a Windows/C++ programmer, so I’ll probably
+    be moving it to C++. </p>
+    <p>While I am not promising support on this, you can email me at diver@ratajik.net and
+    I’ll try to help out. If you make mods or fixes to the source, please mail me at this
+    address so I can integrate it in.</p>
+    </font><p><font size="2"></font>&nbsp;</p>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial" size="4"><b>&nbsp;</b></font></p><font face="Arial" size="4"><b>
+
+</b></font><p><font face="Arial" size="4"><b><a name="_Toc419370659">II. High level design</a></b></font><font size="2"></font></p><font size="2">
+
+</font><p><font size="2"></font><font face="Arial"><b>&nbsp;</b></font></p><font face="Arial"><b>
+
+</b></font><p><font face="Arial"><b><a name="_Toc419370660">A. Overall architecture</a></b></font><font size="2"></font></p><font size="2">
+
+<blockquote>
+  <blockquote>
+    <p>While designing Diver, I attempted to separate the system in to four primary layers.
+    Each layer general interacts with the layers below and above to get its job done. The four
+    layers are the UI, Game Engine, Sprite Engine, and Graphics Engine Layers. All of these
+    layers remain the same for all games, except the Game and Sprite Engine Layers.</p>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+
+<p align="CENTER"><img src="TunnelWars%20-%20Design%20Document_files/Image7.gif" height="199" width="448"></p>
+
+<p><b>&nbsp;</b></p><b>
+
+</b><p align="CENTER"><b><a name="_Toc419370688">Figure 1 - High Level Logical Diagram</a></b></p>
+
+</font><p><font size="2"></font><font face="Arial">&nbsp;</font></p><font face="Arial">
+
+</font><p><font face="Arial"><a name="_Toc419370661">1. The User Interface Layer</a></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        <p>This layer primarily feeds UI information down to the game engine, along with
+        high-level management of the game’s windows, menu’s and dialogs. It also kicks
+        off the game engine.</p>
+        </font><p><font size="2"></font>&nbsp;</p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial">&nbsp;</font></p><font face="Arial">
+
+</font><p><font face="Arial"><a name="_Toc419370662">2. The Game Engine Layer</a></font><font size="2"></font></p><font size="2">
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <blockquote>
+        <p>This layer is the most responsible for the dynamics of the game. It controls how and
+        when things happen. It controls the player input from the UI layer; it spawns computer
+        sprites when it is time to do so. It creates player and computer missiles, and controls at
+        a high level how they function.</p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>&nbsp;</p>
+
+<p align="CENTER"><img src="TunnelWars%20-%20Design%20Document_files/Image8.gif" height="412" width="714"></p>
+
+<p><b>&nbsp;</b></p><b>
+
+</b></font><b><p align="CENTER"><font size="2"><a name="_Toc419370689">Figure 2 - Game sub-system</a></font><font face="Arial"></font></p><font face="Arial">
+
+</font></b><p><b><font face="Arial"><a name="_Toc419370663">a. Player Sprite</a></font></b><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        </font><blockquote><font size="2">
+          </font><blockquote><font size="2">
+            </font><p><font size="2">The Game Engine layer process input from the UI layer (keyboard input, mouse or
+            joystick if it is enabled.) It translates this input into movement or action of the player
+            sprite. The player sprite is a thread, and handles input by using sprite messaging (see
+            Messaging for more information.). The player thread handles movement, collision, and
+            action for the player sprite.</font></p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial"><b>&nbsp;</b></font></p><font face="Arial"><b>
+
+</b></font><p><font face="Arial"><b><a name="_Toc419370664">b. Computer Sprite</a></b></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    <blockquote>
+      <blockquote>
+        <blockquote>
+          <blockquote>
+            <p>At the appropriate time (currently based on time and then a random number), the Game
+            Layer will spawn a Walker (Computer Sprite). When creating the sprite, it sets the Walkers
+            destination, starting point, and velocity. The Game Layer will spawn the Computer Sprite
+            by creating a new thread. The Computer Sprite runs in this thread, and handles movement,
+            collision, and actions (firing at the player, primarily). </p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    </font><font face="Arial"><b><p><a name="_Toc419370665">c. Action Sprites (missiles)</a></p>
+    </b></font><font size="2"></font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        </font><blockquote><font size="2">
+          </font><blockquote><font size="2">
+            </font><p><font size="2">The player sprite or the computer sprite can both spawn various types of missiles. They
+            create a thread for the missile sprite, setting its destination, start point, and
+            velocity. The thread handles movement and collisions, using sprite messaging.</font></p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial"><b>&nbsp;</b></font></p><font face="Arial"><b>
+
+</b></font><p><font face="Arial"><b><a name="_Toc419370666">d. Sprite messaging.</a> </b></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        </font><blockquote><font size="2">
+          </font><blockquote><font size="2">
+            <p>Each sprite has a value, "usMessage". When the Sprite Layer has detected that
+            something has happened to the sprite (collision, boundary hit, destination reached), it
+            will set this value to the appropriate message. Each sprite uses this message to determine
+            what to do next. For example, by using the message, a sprite can determine that it was hit
+            by an ACTIVE COMPUTER_SPRITE, and die.</p>
+            </font><p><font size="2"></font>&nbsp;</p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial">&nbsp;</font></p><font face="Arial">
+
+</font><p><font face="Arial"><a name="_Toc419370667">3. The Sprite Layer</a></font><font size="2"></font></p><font size="2">
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <blockquote>
+        <p>This layer is responsible for the low level management of the sprites. This includes
+        sprite messaging, low level collision detection, and AutoMoves. It also processes request
+        from the Game Engine Layer and the Video layer.</p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p align="CENTER"><img src="TunnelWars%20-%20Design%20Document_files/Image9.gif" height="308" width="719"></p>
+
+<p><b>&nbsp;</b></p><b>
+
+<p align="CENTER"><a name="_Toc419370690">Figure 3 - Sprite Layer</a></p>
+
+</b></font><b></b><blockquote><b><font size="2">
+  </font></b><blockquote><b><font size="2">
+    </font><font face="Arial"><p><a name="_Toc419370668">a. Collision Detection</a></p>
+    </font></b><font size="2"><blockquote>
+      <blockquote>
+        <blockquote>
+          <blockquote>
+            <p>As each sprite is processing (a request made by the Video layer), it detects if it has
+            collided with another sprite. It does this by simple overlapping rectangle calculations.
+            If it detects a collision, it uses sprite messaging to notify the controlling sprite
+            thread. </p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    </font><font face="Arial"><b><p><a name="_Toc419370669">b. Automove</a></p>
+    </b></font><font size="2"></font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        </font><blockquote><font size="2">
+          </font><blockquote><font size="2">
+            </font><p><font size="2">Each sprite can be put into "Auto Move" mode. If this happens, a function is
+            called in the Sprite Layer to move the sprite. When an AutoMove has finished, sprite
+            messaging is used to notify the controlling sprite thread that it has arrived. </font></p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial">&nbsp;</font></p><font face="Arial">
+
+</font><p><font face="Arial"><a name="_Toc419370670">4. Video Layer.</a></font><font size="2"></font></p><font size="2">
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <blockquote>
+        <p>This layer is responsible for blitting the sprites from the sprites list (and
+        background(s)) to the off-screen video buffer, and then blitting the off-screen buffer to
+        the video buffer. It makes use of the Sprite Layer to handle sprite-specific things. It
+        uses OS/2’s Dive (Direct Video interface) to do the actual blitting</p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>&nbsp;</p>
+
+<p align="CENTER"><img src="TunnelWars%20-%20Design%20Document_files/Image10.gif" height="425" width="584"></p>
+
+<p><b>&nbsp;</b></p><b>
+
+</b><p align="CENTER"><b><a name="_Toc419370691">Figure 4 - Video Layer</a></b></p>
+
+</font><p><font size="2"></font><font face="Arial"><b>&nbsp;</b></font></p><font face="Arial"><b>
+
+</b></font><p><font face="Arial"><b><a name="_Toc419370671">B. Code Highlights</a></b></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><p><font size="2">I am not going to attempt to fully document the code at this time. If I port it to C++,
+    I will do some modeling and OOD, and will inherently have more documentation for it For
+    now I will cover some of the most important parts of the code.</font></p>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial">&nbsp;</font></p><font face="Arial">
+
+</font><p><font face="Arial"><a name="_Toc419370672">1. Sprite Linked list.</a></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        <p>The most important linked list is the sprite linked list. It holds everything together.
+        The list is a standard forward-backward pointing linked list, composed of pointers to the
+        structure SPRITE_OBJECT. Each of these sprite nodes contains all of the information needed
+        to manipulate and process a sprite. Some of the highlights to this structure are:</p>
+        </font><font face="Arial"><b><p><a name="_Toc419370673">a. SPRITE_HEADER</a></p>
+        </b></font><font size="2"><blockquote>
+          <blockquote>
+            <p>This structure contains general sprite information, such as the name of the sprite,
+            semaphore information, the sprites type, the state of the sprite, the PID of the sprite,
+            and a pointer to the function that controls the sprite. </p>
+          </blockquote>
+        </blockquote>
+      </font></blockquote><font size="2">
+    </font></blockquote><font size="2">
+    </font><font face="Arial"><b></b></font><p><font face="Arial"><b><a name="_Toc419370674">b. HIT_INFO</a></b></font></p>
+  </blockquote>
+</blockquote>
+
+<p><font size="2">&nbsp;</font></p><font size="2">
+
+<p>&nbsp;</p>
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        <blockquote>
+          <blockquote>
+            <p>The HIT_INFO structure contains information about whether to detect collisions for the
+            sprite, the hit state the sprite is in (hit, not hit, et al), and, if hit, a pointer to
+            the sprite that hit it. This can be used to determine what happens on a hit (e.g., if a
+            computer missile hits the player, the player can look at the sprite that hit it and figure
+            out that it needs to blow up). </p>
+          </blockquote>
+        </blockquote>
+        </font><font face="Arial"><b><p><a name="_Toc419370675">c. SPACE_INFO</a></p>
+        </b></font><font size="2"><blockquote>
+          <blockquote>
+            <p>This structure contains the information about where the sprite is, where the sprite is
+            going, and how fast it is going there (both velocity and frame rate).</p>
+          </blockquote>
+        </blockquote>
+      </font></blockquote><font size="2">
+    </font></blockquote><font size="2">
+    </font><font face="Arial"><b><p><a name="_Toc419370676">b. ACTIVE_BITMAP_LIST</a></p>
+    </b></font><font size="2"><blockquote>
+      <blockquote>
+        <blockquote>
+          <blockquote>
+            <p>The active bitmap list contains a pointer to the BITMAP_INFO, and the offset the bitmap
+            should be draw from the origin. </p>
+            <p>&nbsp;</p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    </font><font face="Arial"><b><p><a name="_Toc419370677">d. BITMAP_INFO</a></p>
+    </b></font><font size="2"><blockquote>
+      <blockquote>
+        <blockquote>
+          <blockquote>
+            <p>This struct is tells the graphics layer which bitmap list to process (Alive, Dead,
+            idle), and how to process them (forward, backwards). </p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    </font><font face="Arial"><b><p><a name="_Toc419370678">e. User Defined Info</a></p>
+    </b></font><font size="2">
+  </font></blockquote><font size="2">
+</font></blockquote><font size="2">
+
+<p>Any info that a game-engine user might want to place on this node.</p>
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><font face="Arial"><b><p><a name="_Toc419370679">b. Alive, Inactive, and Dead
+    lists.</a></p>
+    </b></font><font size="2"></font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        </font><blockquote><font size="2">
+          </font><blockquote><font size="2">
+            </font><p><font size="2">As each sprite processes, it will change the bitmap list in this structure to point to
+            one of the three possible states (Alive, dead, or idle). </font></p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial">&nbsp;</font></p><font face="Arial">
+
+</font><p><font face="Arial"><a name="_Toc419370680">2. BARCH (Binary Archive)</a></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        </font><p><font size="2">Think "PAK" or "WAD" file. This is a separate utility that I wrote
+        that will place files in a archive, and provides an API set to manipulate those files.
+        Currently, all of the BMP’s for the sprites are kept in the .BAR archive (good thing,
+        to, as there are a lot of them!) NOTE on the code: BARCH is as-is from ’95. I made no
+        attempt to clean the code up or improve on it in any way. I plan on using an off the shelf
+        version next time around, so didn’t want to put any extra effort in to BARCH.</font></p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial">&nbsp;</font></p><font face="Arial">
+
+</font><p><font face="Arial"><a name="_Toc419370681">3. Bitmap Loading</a></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        <p>A pointer to each bitmap is stored on a linked list. When a request for a bitmap is
+        made, the loader function first checks to see if the bitmap is on the list. If it is, it
+        just returns a pointer to it. Otherwise it creates a new node and loads the bitmap. This
+        ensures maximum performance on bitmap loads. </p>
+        </font><p><font size="2">IMPORTANT: Never delete the pointer to a bitmap, except when cleaning up this list.</font></p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial">&nbsp;</font></p><font face="Arial">
+
+</font><p><font face="Arial"><a name="_Toc419370682">4. "Loose" Synchronization</a> </font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        <p>When a program makes use of threads, it normally uses semaphores to synchronize access
+        to memory and some types of resources. For example, when adding a node to a linked list, a
+        semaphore would be used to ensure that no other thread accesses the list’s memory
+        while it manipulates it.. In order to achieve the maximum performance, I’ve written
+        the code in such a way that this is not, for most case, needed. (You’re cringing,
+        right? Well, it works, and it’s fast! &lt;VBG&gt;)</p>
+        <p>The only time a semaphore is used is inside of the node creation for the SPRITE_OBJECT
+        linked list. This ensures that if a node is reused or created, pointer collisions
+        won’t happen (e.g, two threads end up using the same sprite node. Amusing to see, but
+        not to fun in a game engine). The only part of the system that looks at the semaphore is
+        the node creation function; everyone else just processes as needed.</p>
+        <p>In order to do this "lose" threading, there’s one big rule that needs to
+        be followed: <i><b>NEVER DELETE ANYTHING! </b></i>An example of this is when a sprite has
+        finished processing, the thread "deletes" the sprite, which only results in a
+        state change for the sprite node (STATE_INACTIVE). The next time a sprite is created that
+        is the same type as the newly inactive sprite, the node is reused. This ensures that we
+        don’t start gobbling up memory by re-using it, and will prevent memory
+        collisions/walks/et al. </p>
+        <p>The only big downside to this is sprite message walks. It is possible that three sprite
+        threads might "post" messages to a single sprite before that sprite can process
+        the messages. This will result in messages being lost. A simple fix for this would be to
+        create some kind of FIFO array or list to hold each message. I have not yet done this,
+        primary for times sake, and I haven’t actually seen this happen (it might have,
+        it’s just not noticeable.)</p>
+        </font><p><font size="2"></font>&nbsp;</p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial"><b>&nbsp;</b></font></p><font face="Arial"><b>
+
+</b></font><p><font face="Arial"><b><a name="_Toc419370683">C. Compiling.</a></b></font><font size="2"></font></p><font size="2">
+
+<p>&nbsp;</p>
+
+<p>After unzipping the source file (TWSRC.ZIP), you should see the following tree:</p>
+
+<p>\source30\dive</p>
+
+<p>\source30\dive\sprites</p>
+
+<p>\source30\barch</p>
+
+<p>The source30 refers to the OS/2 version (3.0+). I normally keep the compiler for the OS
+version in the tree, but have taken it out of the zip (I figure IBM doesn't want me to
+distribute Visual Age. &lt;VBG&gt;) </p>
+
+<p>The dive directory contains all of the source code for TunnelWars. To make it, type
+"nmake" in that directory. To make the debug version, type "nmake
+"DEBUG=1" ". Also, as a standard, I make a M.CMD command file that will
+compile whatever program is in the current directory, in debug mode.</p>
+
+<p>The \source30\dive\sprites directory is used to build the BAR (Binary ARchive file). It
+uses the BARCH.INI file, and can be build running the BARCH.CMD file. NOTE: BARCH must be
+built in \source30\barch before the BAR file can be created. The output of this action is
+the creation of the "DIVER.BAR" file. Copy it to the \source30\dive directory if
+it is created correctly. </p>
+
+<p>The \source30\barch directory contains the BARCH (Binary ARchive program). BARCH files
+are used to store game files (BMP’s, in this instance). To build it, go to that
+directory, and type "nmake". Or, to build debug, using the M.CMD in that
+directory. The output of this action will be the files BARCHW (the program that creates
+the archive), BARCHR (which reads the archive, plus creates the BARCHR.OBJ file which is
+linked by TunnelWars to access the BAR file), and TEST, a simple test program that will
+read and write files from the archive.</p>
+
+<p>I normally have a fairly complex build environment, as I usually have dependencies
+between different programs I've written (Blame IBM, I guess. After working on the OS/2
+development team in Boca for a couple of years, I just got used to really big build
+trees!). I've tried to reduce this to the minimum, Dive and BARCH. I've removed all global
+makefile dependencies, et al. If you run in to any problems building, drop me a note and
+I’ll try to help you out.</p>
+
+<p>&nbsp;</p>
+
+<p>Also, in the \source30\dive\design directory, I’ve included a copy of this
+document, along with the Visio files for diagrams in this document. You can also find the
+latest version of this document at http://www.ratajik.net/TunnerlWars</p>
+
+<p>&nbsp;</p>
+
+</font><p><font size="2"></font><font face="Arial" size="4"><b>&nbsp;</b></font></p><font face="Arial" size="4"><b>
+
+</b></font><p><font face="Arial" size="4"><b><a name="_Toc419370684">II. Other Information.</a></b></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><p><font size="2">As I stated earlier, I don’t really consider this code complete. I’ve done
+  some clean-up in the last couple of days, made it compile with the current version of
+  Visual Age and work with Merlin (Hey IBM, what happened to the gamesvr.dll!?!?! In Warp, I
+  would go into full-screen mode, getting about 30% better frame rates. Perhaps OS/2 was
+  never meant to be a game OS, eh? Or an OS at all? &lt;VBG&gt;)</font></p>
+</blockquote>
+
+<p><font face="Arial"><b>&nbsp;</b></font></p><font face="Arial"><b>
+
+</b></font><p><font face="Arial"><b><a name="_Toc419370685">A. Known issues.</a></b></font><font size="2"></font></p><font size="2">
+
+<p>If you use this code for anything, you might want to know about these issues:</p>
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        </font><blockquote><font size="2">
+          <p>Sprite Message Collision (see above).</p>
+          <p>The access times on linked lists are not very good, at least not for a game. As more
+          sprites are added, the game starts getting slower (80+ sprites). A lot of this can be
+          attributed to the SPRITE_OBJECT list. I would like to turn this in to something a bit
+          faster (hash table, binary tree, etc.). </p>
+          <p>The collision detection only works on rectangles. What should be done is a rectangle
+          detection, and then, if it passes that, a bit (every other bit?) comparison for better
+          detection.</p>
+          <p>Many of the sprite handler functions do very much the same thing. Functionallizing this
+          would be a good idea, and make adding new stuff much easier.</p>
+          </font><p><font size="2"></font>&nbsp;</p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p><font face="Arial"><b>&nbsp;</b></font></p><font face="Arial"><b>
+
+</b></font><p><font face="Arial"><b><a name="_Toc419370686">A. Performance characteristics</a></b></font><font size="2"></font></p><font size="2">
+
+</font><blockquote><font size="2">
+  </font><blockquote><font size="2">
+    <p>I original wrote this game under OS/2 Warp, on a 66 DX/2. I don’t recall what the
+    performance was on it (other that "OK"), but I’ve put together some info
+    running on my Pentium 166:</p>
+    </font><blockquote><font size="2">
+      </font><blockquote><font size="2">
+        <p>Max threads: 113 (Just haven’t tried to go higher, as the performance goes down.
+        See "Known Issues").</p>
+        <p>Frames per second: 640x480, max out around 30 or so. If IBM hadn’t taken the
+        gamesvr.dll out of OS/2 it could do full-screen Dive and get much better numbers.</p>
+        <p>RAM usage:</p>
+        <p>Stability: Ok, could be improved. I’ve had the game run for a long time, and then
+        had it crash after 20 minutes. I think I’ve got a small memory walk somewhere, I just
+        haven’t had time to track it down (and the debugger frags when I debug the problem,
+        so I end up re-booting OS/2 EVERY time. Fun.)</p>
+        </font><font face="Arial" size="4"><b><p>&nbsp;</p>
+      </b></font></blockquote><font face="Arial" size="4"><b>
+    </b></font></blockquote><font face="Arial" size="4"><b>
+  </b></font></blockquote><font face="Arial" size="4"><b>
+</b></font></blockquote><font face="Arial" size="4"><b>
+
+</b></font><p><font face="Arial" size="4"><b><a name="_Toc419370687">III. Conclusions</a></b></font><font size="2"></font></p><font size="2">
+
+<blockquote>
+  <p>Did threading the game to this point work out? </p>
+  <p>Sort of… The performance is ok (actually fast for 20 or so sprites). As there
+  doesn’t seem to be any other games of this type under OS/2, it’s hard to judge.
+  When I port it to Windows, I’ll have a better feel for it (Of course, OS/2 might do
+  better context switching than NT… I’ll have to check that out).</p>
+  <p>Did threading simply the code?</p>
+</blockquote>
+
+<p>&nbsp;</p>
+
+<p>A. Yes! Well, it changed how things hung together. I’ve found it very easy to add
+new things to the engine. I wouldn’t go as far as saying it’s a LOT easier then
+traditional game programming (Single threaded). If I could do it again, I might consider
+keeping the main threading (game engine, blit, sound, UI), and keeping all of the sprites
+on one thread. </p>
+
+<p>Q. Can OS/2 handle the demands of an action game?</p>
+
+<p>A. Sure! Run the game and see for yourself. It’s a fast side scrolling game with a
+fair amount of sprite activity going (It even has joystick support!). Even on a 66 DX2 it
+had good performance.</p>
+
+<p>Q. Is OS/2 a good game platform?</p>
+
+<p>A. 1995 -API’s for high-speeding blitting, API’s for sound and the UI, 32 bit
+memory… plus high-end threading. What more can you ask for?!?!?!?</p>
+
+<p>1998 - NO WAY! &lt;VBG&gt; Obviously IBM is not supporting gaming (Are they even
+supporting OS/2 anymore?), and the competition has moved WAY ahead of anything this
+platform is doing. All of the things windows might have been missing in ’94 and
+’95 have been found and surpassed. </p>
+
+</font><p><font size="2"></font>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+
+</body></html>

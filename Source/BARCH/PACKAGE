@@ -1,0 +1,20 @@
+echo off
+echo Distributing PWH
+e:
+cd\source\PWH
+echo Compiling PWH in Test area. (DEBUG=1)
+make PWH /a "DEBUG=1"
+
+echo Copying PWH files to Main frozen area.
+copy PWH.* e:\source\frozen
+
+cd\source\frozen
+echo Compiling PWH in main area (DEBUG=0)
+make PWH /a
+
+echo Backing up PWH to u:\screens\utils\back
+pkzip -a -s[mist] e:\back\gwrutils e:\source\frozen\PWH.*
+
+echo PWH moves complete.
+e:
+cd\source\PWH

@@ -1,0 +1,16 @@
+#ifndef OS2_INCLUDED
+   #include <os2.h>
+#endif
+DLGINCLUDE 1 "dlg.h"
+
+DLGTEMPLATE DLG_GAME_INFO LOADONCALL MOVEABLE DISCARDABLE
+BEGIN
+    DIALOG  "Test", DLG_GAME_INFO, 12, 60, 229, 30, WS_VISIBLE, FCF_SYSMENU | 
+            FCF_TITLEBAR
+    BEGIN
+        LTEXT           "Total:", 101, 13, 18, 27, 8
+        LTEXT           "Message:", 102, 1, 7, 40, 8
+        LTEXT           "0", TX_SCORE, 41, 18, 182, 8
+        LTEXT           "<None>", TX_MESSAGE, 41, 7, 188, 8
+    END
+END

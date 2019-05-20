@@ -1,0 +1,50 @@
+!ifndef RELEASE
+debugc=/Ti+ /O-
+debugl=/CO
+!else
+debugc= O+
+debugl=
+!endif
+
+COMPILE = /W2 /Gm+ /Q+ /Se /C+ /Re /Ss $(debugc) /G4 /DINCL_32 /DPURE_32
+
+OBJ_LIST = dive.obj game.obj sprite.obj diveutil.obj video.obj sound.obj mem.obj ..\barch\barch.obj
+
+dive.exe : dive.res $(OBJ_LIST) dive.def
+#    ILink /FREE {<option>|<obj>|<map>|<lib>|<def>}
+#     ilink  /NOE /NOI /NOD /DE /MAP $(OBJ_LIST)  y:\ibmcpp\lib\os2386.lib + y:\ibmcpp\lib\mmpm2.lib  dive.def
+    icc.exe @<<
+      /B" /de /pmtype:pm /nologo /m:full"
+      /Fe"dive.EXE" 
+      dive.DEF
+      cppooc3i.lib
+      cppom30i.lib
+      mmpm2.lib
+      $(OBJ_LIST)
+<<
+     rc dive.res dive.exe
+
+dive.res: dive.rc dive.rch dive.ico dive.dlg common.h
+     rc -r dive.rc
+
+mem.obj  : mem.c  mem.h
+     icc $(COMPILE) $*.c
+
+game.obj : game.c  common.h video.h sprite.h
+     icc $(COMPILE) $*.c
+
+#/FA+
+video.obj : video.c dive.rch common.h video.h sprite.h
+     icc $(COMPILE) $*.c
+
+dive.obj : dive.c dive.rch common.h sprite.h
+     icc $(COMPILE) $*.c
+
+sprite.obj : sprite.c common.h sprite.h
+     icc $(COMPILE) $*.c
+
+sound.obj : sound.c common.h
+     icc $(COMPILE) $*.c
+
+diveutil.obj : diveutil.c common.h ..\barch\barch.h
+     icc $(COMPILE) /DBARCH $*.c

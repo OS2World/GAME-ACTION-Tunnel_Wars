@@ -1,0 +1,4 @@
+1.  In player sprite, optimize firing missle.
+2. VOID ComBulletSprite(PSPRITE_OBJECT psoCur) IN GAME.C - DEBUG IT
+3.  Optimize all sprites.
+4.  Allow # of walkers to be configured.
